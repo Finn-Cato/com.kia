@@ -1,9 +1,12 @@
 {
   "id": "com.kia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
-  "platforms": ["local", "cloud"],
+  "platforms": [
+    "local",
+    "cloud"
+  ],
   "brandColor": "#CC0E1A",
   "name": {
     "en": "Kia Connect"
@@ -12,9 +15,18 @@
     "en": "Control your Kia vehicle from Homey"
   },
   "tags": {
-    "en": ["kia", "car", "vehicle", "ev", "uvo", "connect"]
+    "en": [
+      "kia",
+      "car",
+      "vehicle",
+      "ev",
+      "uvo",
+      "connect"
+    ]
   },
-  "category": ["tools"],
+  "category": [
+    "tools"
+  ],
   "permissions": [],
   "images": {
     "large": "/assets/images/large.png",
@@ -66,8 +78,13 @@
       "name": {
         "en": "Kia Vehicle"
       },
-      "platforms": ["local", "cloud"],
-      "connectivity": ["cloud"],
+      "platforms": [
+        "local",
+        "cloud"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
       "class": "other",
       "capabilities": [
         "locked",
@@ -79,17 +96,25 @@
       ],
       "capabilitiesOptions": {
         "measure_battery": {
-          "title": { "en": "Battery / Fuel Level" }
+          "title": {
+            "en": "Battery / Fuel Level"
+          }
         },
         "locked": {
-          "title": { "en": "Doors" }
+          "title": {
+            "en": "Doors"
+          }
         },
         "alarm_battery": {
-          "title": { "en": "Low Battery / Fuel" }
+          "title": {
+            "en": "Low Battery / Fuel"
+          }
         }
       },
       "energy": {
-        "batteries": ["INTERNAL"]
+        "batteries": [
+          "INTERNAL"
+        ]
       },
       "images": {
         "large": "/drivers/vehicle/assets/images/large.png",
@@ -165,7 +190,9 @@
           {
             "name": "battery",
             "type": "number",
-            "title": { "en": "Level (%)" }
+            "title": {
+              "en": "Level (%)"
+            }
           }
         ],
         "args": [
@@ -249,8 +276,12 @@
           {
             "type": "number",
             "name": "temperature",
-            "title": { "en": "Temperature (°C)" },
-            "placeholder": { "en": "22" },
+            "title": {
+              "en": "Temperature (°C)"
+            },
+            "placeholder": {
+              "en": "22"
+            },
             "min": 16,
             "max": 30,
             "step": 1
