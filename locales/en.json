@@ -1,0 +1,28 @@
+{
+  "pair": {
+    "error": {
+      "missing_fields": "Please fill in email, password and region.",
+      "no_vehicles": "Login succeeded but no vehicles were found on this account."
+    }
+  },
+  "device": {
+    "charging": "Charging",
+    "climate": "Climate",
+    "range": "Range",
+    "battery": "Battery / Fuel",
+    "locked": "Doors"
+  },
+  "flow": {
+    "charging_started": "Charging started",
+    "charging_stopped": "Charging stopped",
+    "battery_changed": "Battery / fuel level changed",
+    "is_charging": "Car is charging",
+    "is_locked": "Car doors are locked",
+    "lock": "Lock the car",
+    "unlock": "Unlock the car",
+    "start_climate": "Start climate control",
+    "stop_climate": "Stop climate control",
+    "start_charge": "Start charging",
+    "stop_charge": "Stop charging"
+  }
+}

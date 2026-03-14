@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    h2 { margin-bottom: 4px; }
+    p.subtitle { color: #666; margin-top: 0; margin-bottom: 24px; font-size: 14px; }
+    label { display: block; margin-bottom: 4px; font-size: 14px; font-weight: 500; }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      box-sizing: border-box;
+      margin-bottom: 16px;
+    }
+    input:focus, select:focus { outline: none; border-color: #1a73e8; }
+    .notice {
+      background: #fff8e1;
+      border-left: 4px solid #f9a825;
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .notice.visible { display: block; }
+    .notice a { color: #1a73e8; }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    button:hover { background: #1558b0; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    .error {
+      color: #c0392b;
+      font-size: 13px;
+      margin-top: -8px;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .spinner {
+      display: none;
+      text-align: center;
+      margin-top: 12px;
+      color: #666;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Kia Connect</h2>
+  <p class="subtitle">Sign in with your Kia Connect / UVO account</p>
+
+  <form id="loginForm">
+    <label for="region">Region</label>
+    <select id="region" required>
+      <option value="">— Select region —</option>
+      <option value="EU">Europe (EU)</option>
+      <option value="US">United States (US)</option>
+      <option value="CA">Canada (CA)</option>
+      <option value="AU">Australia (AU)</option>
+    </select>
+
+    <div class="notice" id="euNotice">
+      ⚠️ <strong>EU users — reCAPTCHA workaround required.</strong><br>
+      Kia Europe now blocks direct password login. You must first run a one-time script
+      to get a <strong>refresh token</strong>, then paste that token in the
+      <em>Password</em> field below instead of your real password.<br><br>
+      Follow the guide for your OS:<br>
+      &bull; <strong>Windows:</strong> open PowerShell and run:<br>
+      <code style="font-size:11px;word-break:break-all">
+        mkdir $env:TEMP\kia; cd $env:TEMP\kia; py -m venv .venv; .\.venv\Scripts\Activate.ps1; pip install selenium requests webdriver-manager; iwr -UseBasicParsing -OutFile KiaFetchApiTokensSelenium.py https://gist.github.com/fuatakgun/fa4ef1e1d48b8dca2d22133d4d028dc9/raw/fe95ed7c02913f6277878a100458be78b794603d/gistfile1.txt; py .\KiaFetchApiTokensSelenium.py
+      </code><br>
+      &bull; <strong>Linux / Mac:</strong> see the
+      <a href="https://github.com/Hyundai-Kia-Connect/hyundai_kia_connect_api/wiki/Kia-Europe-Login-Flow" target="_blank">full guide</a>.
+    </div>
+
+    <label for="username">E-mail</label>
+    <input type="email" id="username" placeholder="you@example.com" autocomplete="email" required />
+
+    <label for="password">Password <span id="passwordHint" style="font-weight:400;color:#888">(or refresh token for EU)</span></label>
+    <input type="password" id="password" placeholder="Password or EU refresh token" autocomplete="current-password" required />
+
+    <label for="pin">PIN <span style="font-weight:400;color:#888">(required for remote commands)</span></label>
+    <input type="password" id="pin" placeholder="4-digit PIN" maxlength="6" inputmode="numeric" />
+
+    <div class="error" id="errorMsg"></div>
+
+    <button type="submit" id="submitBtn">Sign in &amp; find vehicles</button>
+    <div class="spinner" id="spinner">Connecting to Kia… please wait</div>
+  </form>
+
+  <script>
+    // Show EU warning when EU region is selected
+    document.getElementById('region').addEventListener('change', function () {
+      var notice = document.getElementById('euNotice');
+      if (this.value === 'EU') {
+        notice.classList.add('visible');
+      } else {
+        notice.classList.remove('visible');
+      }
+    });
+
+    function showError(msg) {
+      var el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      var btn     = document.getElementById('submitBtn');
+      var spinner = document.getElementById('spinner');
+      var errEl   = document.getElementById('errorMsg');
+
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      spinner.style.display = 'block';
+
+      var username = document.getElementById('username').value.trim();
+      var password = document.getElementById('password').value;
+      var region   = document.getElementById('region').value;
+      var pin      = document.getElementById('pin').value.trim();
+
+      try {
+        var result = await Homey.emit('login', { username, password, region, pin });
+        if (result === true) {
+          Homey.nextView();
+        } else {
+          showError(result || 'Login failed');
+          btn.disabled = false;
+          spinner.style.display = 'none';
+        }
+      } catch (err) {
+        showError(err.message || String(err));
+        btn.disabled = false;
+        spinner.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

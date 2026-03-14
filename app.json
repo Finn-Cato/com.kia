@@ -1,0 +1,301 @@
+{
+  "id": "com.kia",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": ["local", "cloud"],
+  "brandColor": "#CC0E1A",
+  "name": {
+    "en": "Kia Connect"
+  },
+  "description": {
+    "en": "Control your Kia vehicle from Homey"
+  },
+  "tags": {
+    "en": ["kia", "car", "vehicle", "ev", "uvo", "connect"]
+  },
+  "category": ["tools"],
+  "permissions": [],
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "author": {
+    "name": "Finn-Cato",
+    "email": "fca@finnlyden.no"
+  },
+  "support": "https://github.com/Finn-Cato/com.kia/issues",
+  "source": "https://github.com/Finn-Cato/com.kia",
+  "homepage": "https://github.com/Finn-Cato/com.kia",
+  "capabilities": {
+    "kia_charging": {
+      "type": "boolean",
+      "title": {
+        "en": "Charging"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "kia_climate": {
+      "type": "boolean",
+      "title": {
+        "en": "Climate"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "kia_range": {
+      "type": "number",
+      "title": {
+        "en": "Range"
+      },
+      "units": "km",
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 0,
+      "min": 0,
+      "max": 3000
+    }
+  },
+  "drivers": [
+    {
+      "id": "vehicle",
+      "name": {
+        "en": "Kia Vehicle"
+      },
+      "platforms": ["local", "cloud"],
+      "connectivity": ["cloud"],
+      "class": "other",
+      "capabilities": [
+        "locked",
+        "measure_battery",
+        "kia_charging",
+        "kia_climate",
+        "kia_range",
+        "alarm_battery"
+      ],
+      "capabilitiesOptions": {
+        "measure_battery": {
+          "title": { "en": "Battery / Fuel Level" }
+        },
+        "locked": {
+          "title": { "en": "Doors" }
+        },
+        "alarm_battery": {
+          "title": { "en": "Low Battery / Fuel" }
+        }
+      },
+      "energy": {
+        "batteries": ["INTERNAL"]
+      },
+      "images": {
+        "large": "/drivers/vehicle/assets/images/large.png",
+        "small": "/drivers/vehicle/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "login",
+          "navigation": {
+            "next": "list_devices"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "login",
+          "navigation": {
+            "next": "done"
+          }
+        },
+        {
+          "id": "done",
+          "template": "done"
+        }
+      ]
+    }
+  ],
+  "flow": {
+    "triggers": [
+      {
+        "id": "charging_started",
+        "title": {
+          "en": "Charging started"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "charging_stopped",
+        "title": {
+          "en": "Charging stopped"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "battery_changed",
+        "title": {
+          "en": "Battery / fuel level changed"
+        },
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": { "en": "Level (%)" }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "is_charging",
+        "title": {
+          "en": "Car !{{is|is not}} charging"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "is_locked",
+        "title": {
+          "en": "Car doors !{{are|are not}} locked"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "lock",
+        "title": {
+          "en": "Lock the car"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "unlock",
+        "title": {
+          "en": "Unlock the car"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "start_climate",
+        "title": {
+          "en": "Start climate control"
+        },
+        "titleFormatted": {
+          "en": "Start climate control at [[temperature]]°C"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "temperature",
+            "title": { "en": "Temperature (°C)" },
+            "placeholder": { "en": "22" },
+            "min": 16,
+            "max": 30,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "stop_climate",
+        "title": {
+          "en": "Stop climate control"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "start_charge",
+        "title": {
+          "en": "Start charging"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "stop_charge",
+        "title": {
+          "en": "Stop charging"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      }
+    ]
+  }
+}
