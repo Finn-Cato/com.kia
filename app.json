@@ -8,7 +8,7 @@
   ],
   "brandColor": "#CC0E1A",
   "name": {
-    "en": "Kia Connect"
+    "en": "Kia Car Login"
   },
   "description": {
     "en": "Control your Kia vehicle from Homey"
@@ -78,11 +78,7 @@
         "en": "Kia Vehicle"
       },
       "platforms": [
-        "local",
-        "cloud"
-      ],
-      "connectivity": [
-        "cloud"
+        "local"
       ],
       "class": "other",
       "capabilities": [

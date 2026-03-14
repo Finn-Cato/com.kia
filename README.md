@@ -1,4 +1,4 @@
-# Kia Connect for Homey
+# Kia Car Login for Homey
 
 Control your Kia vehicle directly from Homey using the official Kia Connect / UVO cloud API.
 
@@ -39,7 +39,7 @@ Control your Kia vehicle directly from Homey using the official Kia Connect / UV
 ## Setup
 
 1. Install the app on your Homey
-2. Go to **Devices → Add device → Kia Connect → Kia Vehicle**
+2. Go to **Devices → Add device → Kia Car Login → Kia Vehicle**
 3. Select your region, enter your Kia Connect / UVO e-mail, password and PIN
 4. All vehicles on the account will be listed — add the ones you want
 
