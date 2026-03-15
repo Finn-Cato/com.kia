@@ -1,0 +1,6 @@
+# Only include production dependencies in app bundle
+node_modules/homey/
+node_modules/.bin/
+*.log
+.homeybuild/
+workspace.code-workspace
