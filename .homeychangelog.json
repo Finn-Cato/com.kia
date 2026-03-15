@@ -19,5 +19,8 @@
   },
   "1.1.15": {
     "en": "Fix: app now installs correctly on customer Homey devices. Removed heavy development-only packages (sharp, openai, etc.) that were being bundled during installation, causing install failures on ARM hardware."
+  },
+  "1.1.16": {
+    "en": "bugfix"
   }
 }
