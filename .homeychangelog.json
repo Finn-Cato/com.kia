@@ -4,5 +4,8 @@
   },
   "1.0.1": {
     "en": "Initial release. Lock/unlock, climate control, charging and battery monitoring for your Kia vehicle. Supports EU, US, CA and AU regions."
+  },
+  "1.1.0": {
+    "en": "bug fix"
   }
 }
