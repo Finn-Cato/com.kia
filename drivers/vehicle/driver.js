@@ -21,7 +21,7 @@ class VehicleDriver extends Homey.Driver {
       }
 
       // Validate by trying to connect and fetching vehicles
-      const api = new KiaApi({ username, password, region, pin });
+      const api = new KiaApi({ username, password, region, pin, logger: this.log.bind(this) });
       const vehicles = await api.getVehicles(); // throws on bad credentials
 
       if (!vehicles || vehicles.length === 0) {
@@ -36,7 +36,7 @@ class VehicleDriver extends Homey.Driver {
     session.setHandler('list_devices', async () => {
       if (!credentials) throw new Error('Not logged in');
 
-      const api = new KiaApi(credentials);
+      const api = new KiaApi({ ...credentials, logger: this.log.bind(this) });
       const vehicles = await api.getVehicles();
 
       return vehicles.map(v => {
@@ -59,7 +59,7 @@ class VehicleDriver extends Homey.Driver {
         throw new Error(this.homey.__('pair.error.missing_fields'));
       }
 
-      const api = new KiaApi({ username, password, region, pin });
+      const api = new KiaApi({ username, password, region, pin, logger: this.log.bind(this) });
       await api.getVehicles(); // validate
 
       await device.setStoreValue('credentials', { username, password, region, pin });

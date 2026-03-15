@@ -34,7 +34,7 @@ class VehicleDevice extends Homey.Device {
   async _initApi() {
     const credentials = this.getStoreValue('credentials');
     if (!credentials) throw new Error('No credentials stored — please repair the device');
-    this._api = new KiaApi(credentials);
+    this._api = new KiaApi({ ...credentials, logger: this.log.bind(this) });
     await this._api.connect();
   }
 
